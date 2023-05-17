@@ -1,7 +1,7 @@
 import * as fs from 'fs'
-
+import path from 'path'
 // const fs = require('fs')  // pehle type-module hatana padega package.json se 
-const data = JSON.parse(fs.readFileSync('data.json', 'utf-8'));
+const data = JSON.parse(fs.readFileSync(path.resolve(__dirname,'data.json'), 'utf-8'));
 const users = data.users;
 
 
