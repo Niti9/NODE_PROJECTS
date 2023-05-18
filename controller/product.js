@@ -283,7 +283,7 @@
 // ye code upar waale ki tarah hai isliye saare comments remove kare diye hai
 import Product from '../model/product.js'
 
-const product = new Product()
+// const product = new Product()
 
 const createProduct = (req, res) => {
 
