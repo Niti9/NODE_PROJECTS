@@ -126,7 +126,8 @@ select.form-control input-md {
   padding: 20px;
   border: 1px solid #ccc;
   border-radius: 5px;
-  background-color: #f7f7f7;
+  color:white;
+  background-color: #060404;
 }
 
 legend {
@@ -137,6 +138,9 @@ legend {
 
 .form-group {
   margin-bottom: 20px;
+  color: white;
+  background-color: black;
+
 }
 
 label.control-label {
@@ -149,9 +153,9 @@ input[type="text"],
 input[type="number"],
 select.form-control {
   width: 100%;
-  padding: 10px;
+  padding: 5px;
   font-size: 16px;
-  border: 1px solid #ccc;
+  border: 1px solid #110f0f;
   border-radius: 4px;
 }
 
@@ -175,3 +179,4 @@ button.btn-primary {
 button.btn-primary:hover {
   background-color: #0069d9;
 }
+
