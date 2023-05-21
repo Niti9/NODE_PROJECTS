@@ -11,7 +11,7 @@ const createUser = (req, res) => {
     /** using jwt key sign method
      *  it will return token id when 
      * we send data on users collection or database
-      */
+    */
     
     // var token = jwt.sign({email: req.body.email}, 'shhhhh'); // ye waala tab kaam karege jab hum private key use nahi karenge
     

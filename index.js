@@ -831,7 +831,7 @@
 
 
 
-/* Making API and using MVC (model view controller)*/ 
+/* Making API and using MVC (model view controller)*/
 // import express from 'express';
 // import * as fs from 'fs'
 
@@ -1223,40 +1223,224 @@
 * to ye myfolder ki jagah build ko lekar aayega bas ek baar server phir se start karna hoga
 /** */
 
+// import express from 'express';
+// import mongoose from 'mongoose'
+// import productRouter  from "./routes/product.js";
+// import userRouter from './routes/user.js';
+// import path from 'path';
+// import cors from 'cors';
+// const server = express();
+// main().catch(err => console.log(err));  // agar error hoga to catch block handle kar lega
+// async function main()
+// {
+
+//     // await mongoose.connect('mongodb://127.0.0.1:27017/ecommerce');
+//     await mongoose.connect('mongodb+srv://NewUser:NewPassword@cluster0.0shci4t.mongodb.net/ecommerce');
+//     console.log('database connected');   
+
+// }  
+// //bodyParser
+// server.use(cors()); //calling cors middleware
+// server.use(express.json());
+// server.use(express.urlencoded()); // ye static server rendering ke add form mein new data add karne ke liye hai
+// server.use(express.static('build')) // Ye wala MyFolder ki files ko static host karega
+// server.use('/products',productRouter) // ab humein /products or /products/:id  search karna padega 
+// server.use('/users',userRouter) // ab hum  /users or /users/:id se search kar sakte hai
+
+// // for add page of react in node
+// server.use('*',(req,res)=>{
+//     res.sendFile(path.resolve('build','index.html'))
+// })
+// // OR 
+// // // this is the normal way only using forward slash using here instead of backward slash
+// // server.use('*',(req,res)=>{
+// //     res.sendFile('E:/Node_programs/build/index.html')
+// // })
+
+// server.listen(8080, () => {
+//     console.log('server started')
+
+// }) 
+
+
+
+
+
+
+/** CHAPTER 11 AUTHENTICATION USING JWT
+ *  ye jwt humein ek token id dega jab hum users 
+ * mein data stored karenge aur uss token id se
+ * kabhi bhi data dekh aur use kar sakte hai
+ */
+
+
+
+
+
+// import express from 'express';
+// import mongoose from 'mongoose'
+// import productRouter from "./routes/product.js";
+// import userRouter from './routes/user.js';
+// import path from 'path';
+// import cors from 'cors';
+// import jwt from 'jsonwebtoken' //importing jwt 
+// import { createUser } from './controller/user.js';
+// const server = express();
+// main().catch(err => console.log(err));
+// async function main() {
+
+//     // await mongoose.connect('mongodb://127.0.0.1:27017/ecommerce');
+//     await mongoose.connect('mongodb+srv://NewUser:NewPassword@cluster0.0shci4t.mongodb.net/ecommerce');
+//     console.log('database connected');
+
+// }
+// //bodyParser
+// // below there is we using jwt verification  of token
+// server.use((req, res, next) => {
+//     const token = req.get('Authorization').split('Bearer ')[1];  // isse hum postman mein localhost:8080/products search karenge
+//     // par pehle postman ke get request mein niche Authorization mein bearer token mein token dekar send karenge
+//     // tab humein vs code ke terminal mein email aur iat(time stamp) wo dono show honge
+//     // aur saayad ye token kuch time mein expire ho jaayenge
+//     console.log(token);
+//     try {
+//         var decoded = jwt.verify(token, 'shhhhh');
+
+//         console.log(decoded);
+//         if (decoded.email) {
+//             next()
+//         }
+//         else {
+//             res.sendStatus(401);
+//         }
+//     }
+//     catch {
+//         res.sendStatus(401);
+
+//     }
+// })
+
+// server.use(cors()); //calling cors middleware
+// server.use(express.json());
+// server.use(express.urlencoded()); // ye static server rendering ke add form mein new data add karne ke liye hai
+// server.use(express.static('build')) // Ye wala MyFolder ki files ko static host karega
+// server.use('/products',  productRouter) // ab humein /products or /products/:id  search karna padega 
+// server.use('/users',userRouter) // ab hum  /users or /users/:id se search kar sakte hai
+
+
+// // for add page of react in node
+// server.use('*', (req, res) => {
+//     res.sendFile(path.resolve('build', 'index.html'))
+// })
+
+// server.listen(8080, () => {
+//     console.log('server started')
+
+// }) 
+
+
+
+/** yahan hum jwt Authorization ko middleware se alag banayenge
+ * 
+  */
+
+import * as fs from 'fs';
 import express from 'express';
 import mongoose from 'mongoose'
-import productRouter  from "./routes/product.js";
+import productRouter from "./routes/product.js";
 import userRouter from './routes/user.js';
 import path from 'path';
 import cors from 'cors';
+import jwt from 'jsonwebtoken' //importing jwt 
+import authRouter from './routes/auth.js'
 const server = express();
-main().catch(err => console.log(err));  // agar error hoga to catch block handle kar lega
-async function main()
-{
+const publicKey = fs.readFileSync(path.resolve('Nodejs_Projects','../public.key'),'utf-8') 
+
+
+
+main().catch(err => console.log(err));
+async function main() {
 
     // await mongoose.connect('mongodb://127.0.0.1:27017/ecommerce');
     await mongoose.connect('mongodb+srv://NewUser:NewPassword@cluster0.0shci4t.mongodb.net/ecommerce');
-    console.log('database connected');   
+    console.log('database connected');
 
-}  
+}
 //bodyParser
-server.use(cors()); //calling cors middleware
+// below there is we using jwt verification  of token
+const auth = ((req, res, next) => {
+    try {
+        const token = req.get('Authorization').split('Bearer ')[1];  // isse hum postman mein localhost:8080/products search karenge
+        // par pehle postman ke get request mein niche Authorization mein bearer token mein token dekar send karenge
+        // tab humein vs code ke terminal mein email aur iat(timing type kuch hota hai) wo dono show honge
+        // aur saayad ye token kuch time mein expire ho jaayenge
+        console.log(token);
+        
+        // var decoded = jwt.verify(token, 'shhhhh'); // ye line tab use hogi jab hum public key nahi use karenge
+        
+        var decoded = jwt.verify(token, publicKey); // ab humne token ek file se le rhe hai
+
+        console.log(decoded);
+        if (decoded.email) {
+            next()
+        }
+        else {
+            res.sendStatus(401);
+        }
+    }
+    catch {
+        res.sendStatus(401);
+
+    }
+})
+
+//middleware or bodyParser
+server.use(cors());
 server.use(express.json());
+server.use(express.urlencoded()); // ye static server rendering ke add form mein new data add karne ke liye hai
 server.use(express.static('build')) // Ye wala MyFolder ki files ko static host karega
-server.use('/products',productRouter) // ab humein /products or /products/:id  search karna padega 
-server.use('/users',userRouter) // ab hum  /users or /users/:id se search kar sakte hai
+server.use('/products', auth, productRouter) // ab humein /products or /products/:id  search karna padega 
+server.use('/users',auth, userRouter) // ab hum  /users or /users/:id se search kar sakte hai
+server.use('/auth', authRouter);// ye naya waala hai router JWT authorization hum ab alag route par karenge
+
+/**
+// ab agar hum postman app par get request mein localhost:8080/products search karenge authorization 
+// ko no auth set karke to humein unauthorized output mein show hoga 
+// aur agar hum post mein localhost:8080/auth/signup mein body mein raw mein data send karenge to output
+// mein humein token id aur details post hote hue dikhegi
+// 
+*/
+
+
 
 // for add page of react in node
-server.use('*',(req,res)=>{
-    res.sendFile(path.resolve('build','index.html'))
+server.use('*', (req, res) => {
+    res.sendFile(path.resolve('build', 'index.html'))
 })
-// OR 
-// // this is the normal way only using forward slash using here instead of backward slash
-// server.use('*',(req,res)=>{
-//     res.sendFile('E:/Node_programs/build/index.html')
-// })
 
 server.listen(8080, () => {
     console.log('server started')
 
 }) 
+
+
+/** Iske baad hum online rsa key generator search karenge
+ * aur 2048 byte set karke humein asymmetric  waala  private aur public key copy karenge
+ * aur dono ko private aur public files mein paste kar denge
+ * private key used for making token 
+ * public key is used for to read token
+ * 
+ */
+
+
+/**jab hum post request se localhost:8080/auth/signUp mein ki body mein json format mein data
+ * send karenge to output mein humein jo token id milegi usse copy karke hum
+ * get  request mein localhost:8080/products/ mein authorization mein bearer  token mein 
+ * wo token id put karenge aur request send karenge 
+ * phir humein terminal mein user ki email id aur time stampm details show hogi
+ * aur postman mein output mein json format mein data show hoga products ka
+ * 
+ */
+
+
+
+
