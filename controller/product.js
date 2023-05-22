@@ -308,6 +308,7 @@ const getAddForm = async (req, res) => {
     const products = await Product.find();
     ejs.renderFile(path.resolve('controller','add.ejs'), function(err, str){
        
+
         res.send(str);
         console.log(err);
     });
@@ -337,8 +338,31 @@ const createProduct = (req, res) => {
 
 //Api 
 const getAllProducts = async (req, res) => {
-    const products = await Product.find();  // This is query of mongoose
-    res.json(products)
+    
+    let query = Product.find();
+    if(req.query && req.query.sort){
+        
+        /**  to sort the products details */ 
+        //query.sort(field).execution  // 1 means ascending order or -1 means descending order
+        // const products = await query.sort({price: -1}).exec();  // This is query of mongoose
+        
+        
+        /** postman mein hum get request mein body ke raw mein
+        // json format mein authorization mein bearer token mein ek sahi tokenId denge 
+        //iss waali mein hum http://localhost:8080/products?sort=-1 se descending(high price to low price)
+        // aur http://localhost:8080/products?sort+1 se ascending (low price to high price ) 
+        */
+        const products = await query.sort({price:req.query.sort}).exec();  // This is query of mongoose
+        res.json(products)
+    }
+    else{
+        //default case mein 
+        // http://localhost:8080/products/ mein authorization , body 
+        // mein normal way mein data postman mein show hongi
+        const products = await query.exec();  // This is query of mongoose
+        res.json(products)
+
+    }
 }
 const getProduct = async (req, res) => {
 
