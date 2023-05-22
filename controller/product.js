@@ -340,7 +340,7 @@ const createProduct = (req, res) => {
 const getAllProducts = async (req, res) => {
     
     let query = Product.find();
-    if(req.query){
+    if(req.query.sort){
         
         /**  to sort the products details */ 
         //query.sort(field).execution  // 1 means ascending order or -1 means descending order
@@ -349,11 +349,12 @@ const getAllProducts = async (req, res) => {
         
         /** postman mein hum get request mein body ke raw mein
         // json format mein authorization mein bearer token mein ek sahi tokenId denge 
-        //iss waali mein hum http://localhost:8080/products?title=1 se title(capital alpahbet to smallest alphabet) show honge
-        // aur http://localhost:8080/products?sort+1 se ascending (low price to high price ) aur sort=-1 se vice versa
-         similarly http://localhost:8080/products?rating+1 mein rating ascending (low to high ) or vice versa
+        isse http://localhost:8080/products?sort=rating&order=asc&limit=3 humein output mein rating 
+        lowest waali milegi aur sirf 3 hi json data show honge
+        aur http://localhost:8080/products?sort=rating&order=desc&limit=3 isme descending orderm mein
+        rating show hogi
         */
-        const products = await query.sort(req.query).exec();  // This is query of mongoose
+        const products = await query.sort({[req.query.sort]:req.query.order}).limit(req.query).exec();  // This is query of mongoose
         res.json(products)
     }
     else{
