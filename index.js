@@ -1442,5 +1442,11 @@ server.listen(8080, () => {
  */
 
 
+/**
+ * humnein phir bcrypt use kiya hai 
+ * jisse hamara password hash mein ho jaayega jisse koi samajh na
+ * sake 
+ */
+
 
 
