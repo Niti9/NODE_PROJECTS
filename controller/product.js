@@ -282,8 +282,39 @@
 /** Ab hum data api se le jaayenge */
 // ye code upar waale ki tarah hai isliye saare comments remove kare diye hai
 import Product from '../model/product.js'
+import ejs from 'ejs'
+import path from 'path'
 
-// const product = new Product()
+
+/*****  ye wala chapter 10 ke liye code hai jahan hum index.js mein data show karayenge
+*/
+const getAllProductsSSR = async (req, res) => {
+    const products = await Product.find();
+    //code for ejs rendering 
+    // format pehle =  filename, data,function(err,str)
+    // ejs.renderFile(path.resolve('../pages/','index.ejs'),{products:products} , function(err, str){
+    ejs.renderFile(path.resolve('controller','index.ejs'),{products:products} ,function(err, str){
+        // // res.send(err);
+        
+        res.send(err);
+        // res.send(str);
+
+        console.log(str);
+    });
+}
+
+
+const getAddForm = async (req, res) => {
+    const products = await Product.find();
+    ejs.renderFile(path.resolve('controller','add.ejs'), function(err, str){
+       
+        res.send(str);
+        console.log(err);
+    });
+}
+
+
+
 
 const createProduct = (req, res) => {
 
@@ -299,6 +330,12 @@ const createProduct = (req, res) => {
 
     });
 }
+
+
+
+
+
+//Api 
 const getAllProducts = async (req, res) => {
     const products = await Product.find();  // This is query of mongoose
     res.json(products)
@@ -316,7 +353,7 @@ const replaceProduct = async (req, res) => {
         res.status(201).json(doc)
     } catch (err) {
         console.log(err);
-        res.status(400).json(doc)
+        res.status(400).json(err)
     }
 }
 const updateProduct = async (req, res) => {
@@ -326,7 +363,7 @@ const updateProduct = async (req, res) => {
         res.status(201).json(doc)
     } catch (err) {
         console.log(err);
-        res.status(400).json(doc)
+        res.status(400).json(err)
     }
 }
 const deleteProduct = async (req, res) => {
@@ -336,7 +373,7 @@ const deleteProduct = async (req, res) => {
         res.status(201).json(doc)
     } catch (err) {
         console.log(err);
-        res.status(400).json(doc)
+        res.status(400).json(err)
     }
 }
-export { createProduct, getAllProducts, getProduct, replaceProduct, updateProduct, deleteProduct }
+export { createProduct, getAllProducts, getProduct, replaceProduct, updateProduct, deleteProduct,getAllProductsSSR,getAddForm}
