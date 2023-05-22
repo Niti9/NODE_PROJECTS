@@ -1,6 +1,6 @@
 import express from 'express';
 
-import { createProduct, getAllProducts, getProduct, replaceProduct, updateProduct, deleteProduct, getAllProductsSSR, getAddForm } from '../controller/product.js'
+import { createProduct, getAllProducts, getProduct, replaceProduct, updateProduct, deleteProduct,  getAddForm } from '../controller/product.js'
 
 // Router method
 const productRouter = express.Router()
@@ -12,7 +12,7 @@ const productRouter = express.Router()
 // Yahan server ki jagah productRouter name diya gaya hai
 //isse niche iss way se bhi chala sakte hai
 productRouter
-    .get('/ssr', getAllProductsSSR)
+    // .get('/ssr', getAllProductsSSR)
     .post('/', createProduct)
     .get('/', getAllProducts)
     .get('/add', getAddForm)

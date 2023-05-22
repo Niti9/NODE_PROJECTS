@@ -288,20 +288,20 @@ import path from 'path'
 
 /*****  ye wala chapter 10 ke liye code hai jahan hum index.js mein data show karayenge
 */
-const getAllProductsSSR = async (req, res) => {
-    const products = await Product.find();
-    //code for ejs rendering 
-    // format pehle =  filename, data,function(err,str)
-    // ejs.renderFile(path.resolve('../pages/','index.ejs'),{products:products} , function(err, str){
-    ejs.renderFile(path.resolve('controller','index.ejs'),{products:products} ,function(err, str){
-        // // res.send(err);
+// const getAllProductsSSR = async (req, res) => {
+//     const products = await Product.find();
+//     //code for ejs rendering 
+//     // format pehle =  filename, data,function(err,str)
+//     // ejs.renderFile(path.resolve('../pages/','index.ejs'),{products:products} , function(err, str){
+//     ejs.renderFile(path.resolve('controller','index.ejs'),{products:products} ,function(err, str){
+//         // // res.send(err);
         
-        res.send(err);
-        // res.send(str);
+//         res.send(err);
+//         // res.send(str);
 
-        console.log(str);
-    });
-}
+//         console.log(str);
+//     });
+// }
 
 
 const getAddForm = async (req, res) => {
@@ -402,4 +402,4 @@ const deleteProduct = async (req, res) => {
         res.status(400).json(err)
     }
 }
-export { createProduct, getAllProducts, getProduct, replaceProduct, updateProduct, deleteProduct,getAllProductsSSR,getAddForm}
+export { createProduct, getAllProducts, getProduct, replaceProduct, updateProduct, deleteProduct,getAddForm}
