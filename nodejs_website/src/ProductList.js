@@ -121,6 +121,7 @@ const ProductList = () => {
 
   const handleSort = async (e) => {
     const field = e.target.value.split('.');
+    //ismein server par sort  aur limiting hoga phir data aayega
     const res = await axios.get(`/products?sort=${field[0]}&order=${field[1]}`);
     console.log(res.data);
     setProducts(res.data);
@@ -162,6 +163,7 @@ const ProductList = () => {
       ))}
 
       {/* to handle sorting  in reactjs or frontend */}
+        {/* ye reactjs 3000 port par chalega  */}
       <select onChange={handleSort}>
         <option value="price.desc">Price High to Low</option>
         <option value="price.asc">Price Low to High</option>
