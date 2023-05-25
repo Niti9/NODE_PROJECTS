@@ -340,6 +340,18 @@ const createProduct = (req, res) => {
 const getAllProducts = async (req, res) => {
     
     let query = Product.find();
+
+    let pageSize = 4;
+    // let page = 1; // for begining
+    // but humein to frontend se chahiye 
+    let page = req.query.page;
+
+    
+
+
+
+
+
     if(req.query.sort){
         
         /**  to sort the products details */ 
@@ -353,8 +365,17 @@ const getAllProducts = async (req, res) => {
         lowest waali milegi aur sirf 3 hi json data show honge
         aur http://localhost:8080/products?sort=rating&order=desc&limit=3 isme descending orderm mein
         rating show hogi
-        */
-        const products = await query.sort({[req.query.sort]:req.query.order}).limit(req.query).exec();  // This is query of mongoose
+
+
+        /** pagination means 4 chor kar rating show karna**/
+        /// isse agar page 1 honge to  0 products skip honge / 
+        // aur agar page 2 honge to 4 products skip honge /
+        // simillarly 3 par 8 products skip , aur 4 page par 12 products skip aise so on/
+        /** aur data postman mein get request mein  
+         * http://localhost:8080/products?sort=rating&order=desc&page=1
+         * aur phir page=2 ,page =3 karke rating check kar sakte hai ki 4 ,4 chor ke chal rha hai ki nahi
+         * agar sahi hoga to matlab next page show hoga */
+        const products = await query.sort({[req.query.sort]:req.query.order}).skip(pageSize*(page-1)).limit(pageSize).exec();  
         res.json(products)
     }
     else{
